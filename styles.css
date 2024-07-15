@@ -1,0 +1,11 @@
+
+@charset 'utf-8';
+
+*{
+    font-family: monospace;
+}
+
+body{
+    background: black;
+    color: white;
+}
