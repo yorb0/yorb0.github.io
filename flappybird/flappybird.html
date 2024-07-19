@@ -24,14 +24,15 @@
         }
         #bird{
             position: absolute;
-            height: 100px;
+            height: 50px;
             width: 100px;
             background: url(bird.png);
             background-size: contain;
             background-repeat: no-repeat;
             border-radius: 99px;
+            bottom: 0;
             left: 200px;
-            z-index: 999;
+            z-index: 99;
         }
         #pipe{
             position: absolute;
@@ -43,7 +44,7 @@
         }
         #hole{
             position: absolute;
-            height: 200px;
+            height: 300px;
             width: 100px;
             background: linear-gradient(to bottom right, #0003, #0003), url(background.png) fixed;
             background-repeat: no-repeat;
@@ -65,6 +66,22 @@
             padding: 10px;
             cursor: pointer;
         }
+        #score{
+            position: absolute;
+            top: 0;
+            width: 100%;
+            color: white;
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        #score h1{
+            width: fit-content;
+            padding: 10px 40px;
+            background: #0001;
+            border-radius: 999px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -75,80 +92,96 @@
         </h1>
         <div id="bird"></div>
         <div id="pipe">
-            <div id="hole">
-            </div>
+            <div id="hole"></div>
         </div>
     </div>
+    <div id="score">
+        <h1>
+            SCORE: 0
+        </h1>
+    </div>
+</body>
     <script>
         const bird = document.getElementById('bird')
         const pipe = document.getElementById('pipe')
         const hole = document.getElementById('hole')
         const over = document.getElementById('over')
+        const score = document.getElementById('score')
+        let points = 0
         const gravity = .5
         let dead = false
         let birdSpeed = 0
-        let birdY = 0
+        let pipeSpeed = 10
+        let birdY = document.body.clientHeight
         let pipeX = document.body.clientWidth
-        let holeY = 0
-        let jumping = false
-        holeY = Math.floor(Math.random() * document.body.clientHeight / 1.5)
-        hole.style.top = holeY + 'px' 
-        
+        let holeY = Math.floor(Math.random() * document.body.clientHeight / 1.5)
+        hole.style.bottom = holeY + 'px'
+        let running = true
+    
+        // jump
         onkeydown = function(e)
         {
-            if(e.key == ' ')
+            if(e.code == 'Space')
             {
                 birdSpeed = 0
-                birdSpeed -= 10
-                bird.style.top = birdY + 'px'
+                birdSpeed += 12
             }
         }
-    
-        setInterval(function()
+
+        function updateBird()
         {
-            // gravity
-            if(birdY >= document.body.clientHeight + 500 || birdY < -500)
-            {
-                birdSpeed = 0
-                birdY = 0
-                dead = true
-                bird.style.left = '-200px'
-                over.style.display = 'flex'
-            }
-
-            birdSpeed += gravity
+            birdSpeed -= gravity
             birdY += birdSpeed
-            bird.style.top = birdY + 'px'
+            bird.style.bottom = birdY + 'px'
+        }
 
-            // pipe move left
+        function updatePipe()
+        {
             if(pipeX <= 0)
             {
                 pipeX = document.body.clientWidth   
                 holeY = Math.floor(Math.random() * document.body.clientHeight / 1.5)
-                hole.style.top = holeY + 'px' 
+                hole.style.bottom = holeY + 'px' 
             }
-            pipeX -= 7
+            pipeX -= pipeSpeed
             pipe.style.left = pipeX + 'px' 
-        
-            if(pipeX < 200 && pipeX)
+        }
+
+        function checkCollision()
+        {
+            // collision
+            if(pipeX < 250 && pipeX > 150)
             {   
                 // collision on top of hole
                 if(birdY < holeY)
                 {
-                    dead = true
                     bird.style.left = '-200px'
                     over.style.display = 'flex'
+                    score.style.display = 'none'
                 }
                 // collision below hole
-                else if(birdY > holeY + 200)
+                else if(birdY + 50 > holeY + 300)
                 {
-                    dead = true
                     bird.style.left = '-200px'
                     over.style.display = 'flex'
+                    score.style.display = 'none'
                 }
             }
-        }, 10)
-        
+            if(pipeX == 250)
+            {
+                points++
+                score.innerHTML = `<h1>SCORE: ${points}</h1>`
+            }
+        }
+
+        // game loop
+        function update()
+        {
+            updateBird()
+            updatePipe()
+            checkCollision()
+        }
+        setInterval(update, 10)
+    
     </script>
-</body>
 </html>
