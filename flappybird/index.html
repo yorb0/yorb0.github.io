@@ -168,10 +168,15 @@
     }
 
     function updatePipe() {
+      // if pipe past screen
       if (pipeX <= 0) {
         pipeX = document.body.clientWidth + 100;
         holeY = Math.abs(Math.floor(Math.random() * document.body.clientHeight - 300));
         hole.style.bottom = holeY + "px";
+        
+        // increase score
+        points++;
+        score.innerHTML = `<h1>SCORE: ${points}</h1>`;
       }
       pipeX -= pipeSpeed;
       pipe.style.left = pipeX + "px";
@@ -190,10 +195,6 @@
         {
           die()
         }
-      }
-      if (pipeX == 250 + (document.body.clientWidth % 10)) {
-        points++;
-        score.innerHTML = `<h1>SCORE: ${points}</h1>`;
       }
     }
 
