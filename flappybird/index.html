@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>flappybird</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: monospace;
+        overflow: hidden;
+      }
+      body {
+        overflow: hidden;
+      }
+      #screen {
+        height: 100vh;
+        width: 100%;
+        background: linear-gradient(to bottom right, #0003, #0003),
+          url(background.png);
+        background-size: cover;
+        background-position: bottom;
+        background-repeat: no-repeat;
+      }
+      #bird {
+        position: absolute;
+        height: 50px;
+        width: 100px;
+        background: url(bird.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        border-radius: 99px;
+        bottom: 100px;
+        left: 200px;
+        z-index: 99;
+      }
+      #pipe {
+        position: absolute;
+        right: 0;
+        background: green;
+        height: 99.5vh;
+        width: 100px;
+        right: -100px;
+      }
+      #hole {
+        position: absolute;
+        height: 300px;
+        width: 100px;
+        background: linear-gradient(to bottom right, #0003, #0003),
+          url(background.png) fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: bottom;
+      }
+      #over {
+        font-size: 50px;
+        color: red;
+        display: none;
+        width: 100%;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        z-index: 9999;
+        background: black;
+      }
+      button {
+        padding: 10px;
+        cursor: pointer;
+      }
+      #score {
+        user-select: none;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        color: white;
+        font-size: 20px;
+        display: flex;
+        justify-content: center;
+        display: none;
+      }
+      #score h1 {
+        width: fit-content;
+        padding: 10px 40px;
+        background: #0001;
+        border-radius: 999px;
+        margin-top: 20px;
+      }
+      #start {
+        background: #00000099;
+        z-index: 9999;
+        display: flex;
+        color: white;
+        position: absolute;
+        height: 100vh;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 20px;
+        line-height: 1;
+      }
+      #start b {
+        font-size: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="screen">
+      <div id="start">
+        <b>FLAPPY BIRD</b>
+        <p>press space to jump</p>
+        <button onclick="play()" autofocus>PLAY</button>
+      </div>
+      <div id="over">
+        <b>YOU DIED</b>
+        <button onclick="window.location.reload()">RETRY</button>
+      </div>
+      <div id="bird"></div>
+      <div id="pipe">
+        <div id="hole"></div>
+      </div>
+    </div>
+    <div id="score">
+      <h1>SCORE: 0</h1>
+    </div>
+  </body>
+  <script>
+    const bird = document.getElementById("bird");
+    const pipe = document.getElementById("pipe");
+    const hole = document.getElementById("hole");
+    const over = document.getElementById("over");
+    const score = document.getElementById("score");
+    const start = document.getElementById("start");
+    let points = 0;
+    const G = 0.5;
+    let dead = false;
+    let birdSpeed = 0;
+    let pipeSpeed = document.body.clientWidth / 200;
+    let birdY = document.body.clientHeight / 2;
+    let pipeX = document.body.clientWidth + 100;
+    let holeY = Math.abs(
+      Math.ceil(Math.random() * document.body.clientHeight - 300)
+    );
+    hole.style.bottom = holeY + "px";
+    let running = true;
+
+    // jump
+    onkeydown = function (e) {
+      if (e.code == "Space") {
+        birdSpeed = 0;
+        birdSpeed += 12;
+        // bird.style.transform = 'rotateZ(-30deg)'
+      }
+    };
+    onclick = function (e) {
+      birdSpeed = 0;
+      birdSpeed += 12;
+    };
+
+    function updateBird() {
+      birdSpeed -= G;
+      birdY += birdSpeed;
+      bird.style.bottom = birdY + "px";
+      // if(birdSpeed < 0) bird.style.transform = 'rotateZ(30deg)'
+    }
+
+    function updatePipe() {
+      if (pipeX <= 0) {
+        pipeX = document.body.clientWidth + 100;
+        holeY = Math.abs(Math.floor(Math.random() * document.body.clientHeight - 300));
+        hole.style.bottom = holeY + "px";
+      }
+      pipeX -= pipeSpeed;
+      pipe.style.left = pipeX + "px";
+    }
+
+    function checkCollision() {
+      // collision
+      if (pipeX < 250 && pipeX > 150) {
+        // collision on top of hole
+        if (birdY < holeY)
+        {
+          die()
+        }
+        // collision below hole
+        else if (birdY + 50 > holeY + 300) 
+        {
+          die()
+        }
+      }
+      if (pipeX == 250 + (document.body.clientWidth % 10)) {
+        points++;
+        score.innerHTML = `<h1>SCORE: ${points}</h1>`;
+      }
+    }
+
+    // game loop
+    function update() {
+      updateBird();
+      updatePipe();
+      checkCollision();
+    }
+
+    function play() {
+      start.style.display = "none";
+      score.style.display = "flex";
+      setInterval(update, 10);
+    }
+
+    function die()
+    {
+      bird.style.display = 'none'
+      over.style.display = "flex";
+      score.style.display = "none";
+      pipe.style.display = "none";
+    }
+  </script>
+</html>
