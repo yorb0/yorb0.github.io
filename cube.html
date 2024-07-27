@@ -11,6 +11,7 @@
     }
 
       body {
+        overflow: hidden;
         color: white;
         background: black;
         display: flex;
@@ -70,7 +71,7 @@
     </style>
   </head>
   <body>
-    <div class="cube">
+    <div class="cube" id="cube">
       <div class="face front">Front</div>
       <div class="face back">Back</div>
       <div class="face right">Right</div>
@@ -79,4 +80,14 @@
       <div class="face bottom">Bottom</div>
     </div>
   </body>
+  <script>
+    const cube = document.getElementById('cube')
+    onmousemove = function(e)
+    { 
+      cube.style.animationDuration = '0s'
+      x = e.x/document.body.clientWidth*360
+      y = e.y/document.body.clientHeight*360
+      cube.style.transform = `rotateX(${-y}deg) rotateY(${-x}deg)`
+    }
+  </script>
 </html>
