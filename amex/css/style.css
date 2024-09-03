@@ -1,77 +1,95 @@
-
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: monospace;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: monospace, sans-serif;
 }
 
-body{
-    overflow: hidden;
-    padding: 100px 0;
-    display: flex;
-    justify-content: center;
+body {
+  overflow: hidden;
+  padding: 100px 0;
+  justify-content: center;
+  background: linear-gradient(to right, blue, violet7);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 10px;
 }
 
-main{
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    gap: 10px;
+.item {
+  cursor: pointer;
+  padding: 20px;
+  transition: 0.1s ease;
+}
+
+.item:hover {
+  background: #eee;
+}
+
+.selecionado {
+  background: lightcoral;
+}
+
+button {
+  cursor: pointer;
+  background: black;
+  color: white;
+  padding: 10px 20px;
+  font-size: large;
+  border: none;
+}
+
+.borda {
+  border: 1px solid black;
+}
+
+button:active {
+  filter: none;
+}
+
+.botoes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+h1 {
+  text-align: center;
+  padding: 20px;
+  text-decoration: underline;
+}
+
+#caixa1 .selecionado {
+  background: #0f09 !important;
+  color: black !important;
+}
+
+#caixa2 .selecionado {
+  background: #f009 !important;
+  color: white !important;
+}
+
+.cursor::before {
+  content: "> ";
+}
+
+.cursor {
+  background: #ddd;
 }
 
 .caixa{
-    height: 200px;
-    overflow-y: scroll;
-    overflow-x: hidden;
+  width: 300px;
 }
 
-.item{
+@media(width<900px){
+  body{
     padding: 10px;
-    cursor: pointer;
-}
-
-.selecionado{
-    background: lightcoral;
-}
-
-button{
-    cursor: pointer;
-    background: black;
-    color: white;
-    border: 1px solid white;
-    padding: 5px 10px;
-}
-
-button:hover{
-    filter: invert(1);
-}
-
-.borda{
-    border: 1px solid black;
-    width: 150px;
-}
-
-button:active{
-    filter: none;
-}
-
-.botoes{
-    display: flex;
     flex-direction: column;
-    gap: 10px;
-}
+    overflow: auto;
+  }
 
-h1{
-    padding: 10px;
-}
-
-@media(width<500px){
-    main{
-        flex-direction: column;
-        width: fit-content;
-    }
-    .caixa{
-        width: 100%;
-    }
+  .caixa{
+    width: 100%;
+    min-height: 100px;
+  }
 }
