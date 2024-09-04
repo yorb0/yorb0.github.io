@@ -68,6 +68,9 @@ addEventListener('keydown', (e)=>{
         case 'Enter':
             itens[p].classList.toggle('selecionado')
             break;
+        case 'Space':
+            itens[p].classList.toggle('selecionado')
+            break;
         case 'KeyA':
             adicionarItem()
             break;

@@ -6,7 +6,6 @@
 }
 
 body {
-  overflow: hidden;
   padding: 100px 0;
   justify-content: center;
   background: linear-gradient(to right, blue, violet7);
