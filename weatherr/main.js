@@ -42,8 +42,8 @@ selectCidade.addEventListener("change", e=>{
             <p>tempo: ${data.weather[0].main}</p>
             <p>temperatura: ${Math.round(data.main.temp - 273)}°C</p>
             <p>sensação: ${Math.round(data.main.feels_like-273)}°C</p>`
-            const date = new Date(data.dt*1000)
-            clock.textContent = `${date.getHours()}:${date.getMinutes()}`
+            const date = new Date((data.dt+data.timezone)*1000)
+            clock.textContent = `${date.getUTCHours()}:${date.getUTCMinutes()}`
             document.body.appendChild(info) 
             const weather = data.weather[0].description
             const urlPexels = 'https://api.pexels.com/v1/search?query='+weather
